@@ -1,0 +1,94 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>인사기록표 작성 · NSD</title><style>@font-face{font-family:Pretendard;src:url("fonts/Pretendard-Regular.ttf") format("truetype");font-weight:400}@font-face{font-family:Pretendard;src:url("fonts/Pretendard-Bold.ttf") format("truetype");font-weight:700}
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 "Malgun Gothic","Apple SD Gothic Neo",sans-serif;color:#20333b;background:#f6f7f7}header{height:66px;background:#182f37;color:white;display:flex;align-items:center;gap:18px;padding:0 clamp(18px,5vw,80px)}.logo{font: bold 27px Georgia;letter-spacing:-1px;border-right:1px solid #647377;padding-right:18px}header span{font-size:14px;letter-spacing:.08em}main{max-width:1430px;margin:auto;padding:32px clamp(16px,4vw,68px)}.heading,.preview-head{display:flex;align-items:center;justify-content:space-between;gap:12px}h1{font-size:clamp(25px,3vw,36px);letter-spacing:-.07em;margin:0}p{margin:4px 0;color:#58696f;font-size:15px}.layout{margin-top:24px;display:grid;grid-template-columns:minmax(310px,.82fr) minmax(410px,1.18fr);gap:24px;align-items:start}.panel,.preview{background:white;border:1px solid #cdd6d7;border-radius:8px;overflow:hidden}.panel h2,.preview h2{font-size:18px;margin:0}.panel h2{padding:18px 22px 14px}.tabs{display:flex;border-bottom:1px solid #d6dede;padding:0 15px;gap:4px}button{cursor:pointer;font:inherit}.tabs button{border:0;background:none;padding:10px 8px;font-size:14px;color:#53636a;border-bottom:3px solid transparent}.tabs button[aria-pressed=true]{font-weight:bold;color:#185a56;border-color:#26776e}.fields{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:14px}.wide{grid-column:1/-1}label{display:grid;gap:5px;font-size:14px;font-weight:600}input,select,textarea{font:inherit;font-weight:400;background:#fff;border:1px solid #b7c5c8;border-radius:4px;padding:9px;width:100%;min-width:0}textarea{resize:vertical;min-height:96px}input:focus,textarea:focus,select:focus,button:focus-visible{outline:2px solid #297b73;outline-offset:2px}.photo{display:flex;gap:15px;align-items:center;border-bottom:1px solid #e0e5e5;padding-bottom:16px}.thumb{width:56px;height:72px;background:#edf2f1;display:grid;place-items:center;border:1px solid #cbd6d5;overflow:hidden}.thumb svg{width:30px;color:#76908c}.thumb img{width:100%;height:100%;object-fit:cover}.photo strong{font-size:14px}.pick,.del{position:relative;display:inline-block;font-size:13px;padding:4px 10px;border:1px solid #bdc9c9;background:white;border-radius:4px;margin:4px 4px 0 0;cursor:pointer}.pick input{position:absolute;inset:0;opacity:0;cursor:pointer}.pick:focus-within{outline:2px solid #297b73}.save{background:#185951;color:white;padding:11px 20px;border:0;border-radius:5px;font-weight:bold;white-space:nowrap}.preview-head{padding:14px 20px}.preview-head span{font-size:13px;color:#526467}.stage{padding:24px clamp(12px,2.4vw,38px);background:#e3e9e8;border-top:1px solid #cdd6d7}.stage canvas{display:block;width:100%;height:auto;background:white;box-shadow:0 2px 9px #182f3728}.status{font-size:14px;color:#245f58} [hidden]{display:none!important}@media(max-width:820px){.layout{grid-template-columns:1fr}.heading{align-items:flex-start}.save{padding:10px 12px;font-size:14px}.stage{padding:16px}.fields{padding:16px}.tabs{padding:0 7px}.heading p{font-size:13px}}
+.stylebox{background:white;border:1px solid #cdd6d7;padding:14px 18px;border-radius:8px;margin-top:20px}.stylebox h2{font-size:15px;margin:0 0 9px}#styles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}#styles button{display:flex;align-items:center;gap:10px;background:white;border:1px solid #c5cecf;padding:6px;border-radius:4px;font-size:14px;color:#24373c}#styles canvas{width:35%;height:29px;object-fit:cover;border-radius:2px}#styles button[aria-pressed=true]{border-color:#245e55;background:#ecf5f2;box-shadow:inset 0 0 0 1px #245e55;font-weight:bold}@media(max-width:650px){#styles{grid-template-columns:1fr 1fr}} @media(min-width:1000px){#styles{grid-template-columns:repeat(3,minmax(0,1fr))}} .colors{display:flex;align-items:center;flex-wrap:wrap;gap:14px;padding-top:14px}.colors label{display:flex;align-items:center;gap:6px}.colors input{width:32px;height:27px;padding:1px;cursor:pointer}.colors button{background:white;border:1px solid #c5cecf;border-radius:4px;font-size:13px;padding:4px 8px} .chapter{display:grid;gap:5px}.chapter input{font-weight:bold}.addChapter{padding:9px;background:white;border:1px dashed #91a59f;border-radius:4px;color:#185951}.chapter{grid-template-columns:minmax(0,1fr) auto}.chapter textarea{grid-column:1/-1}.removeChapter{border:1px solid #c5cecf;background:white;border-radius:4px;color:#843e3c;padding:4px 10px;font-size:13px}.record-head{display:flex;align-items:center;justify-content:space-between;padding:14px 22px 10px}.record-head h2{padding:0}.reset-button,.reset-dialog button{background:white;border:1px solid #bdc9c9;border-radius:4px;padding:5px 12px;font-size:14px}.reset-dialog{width:min(360px,90vw);border:1px solid #bdc9c9;border-radius:8px;color:#20333b;padding:22px}.reset-dialog::backdrop{background:#182f3770}.reset-dialog h2{margin:0 0 8px;font-size:18px}.reset-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.reset-dialog #confirmReset{background:#863c39;border-color:#863c39;color:white}header{min-height:66px;height:auto;padding-block:10px}header h1{font-size:18px;letter-spacing:0}header small{display:inline-block;font-size:12px;font-weight:400;color:#d7e2e2}.stylebox{margin-top:0}.record-actions{display:flex;align-items:center;gap:8px}.panel .status{margin-inline:22px}.photo{flex-wrap:wrap}.credit-field{flex:1 1 130px}.colors button[aria-pressed=true]{background:#ecf5f2;border-color:#548479}</style></head><body><header><b class="logo">NSD</b><h1>인사기록표 메이커 <small>(비공식 컨텐츠입니다. 개인 책임 하에 사용해 주세요.)</small></h1></header><main><section class="stylebox"><h2>서식 스타일</h2><div id="styles" role="group" aria-label="서식 스타일"></div><div class="colors"><label>배경색<input type="color" data-color="paper"></label><label>글자색<input type="color" data-color="ink"></label><label>강조색<input type="color" data-color="accent"></label><button id="resetColors">기본 색상 복원</button><button type="button" hidden id="fluxCenter" aria-pressed="false">이름·사진 가운데 정렬</button><button type="button" hidden id="graphics" aria-pressed="true"></button></div></section><div class="layout"><section class="panel"><div class="record-head"><h2>기록 입력</h2><div class="record-actions"><button class="save" id="save">PNG 저장</button><button class="reset-button" id="resetRecord" type="button">초기화</button></div></div><div class="status" id="status" role="status"></div><dialog class="reset-dialog" id="resetDialog" aria-labelledby="resetTitle" aria-describedby="resetMessage"><h2 id="resetTitle">기록을 초기화할까요?</h2><p id="resetMessage">입력한 내용과 프로필 이미지가 삭제되고, 능력·설정 항목이 기본값으로 돌아갑니다. 되돌릴 수 없어요.</p><div class="reset-actions"><button id="cancelReset" type="button" autofocus>취소</button><button id="confirmReset" type="button">초기화하기</button></div></dialog><p style="margin:0 22px 10px;font-size:13px">이 브라우저에 자동 저장돼요. 사이트 데이터를 지우면 기록도 삭제돼요.</p><div class="tabs" id="tabs"></div><div id="form"></div></section><section class="preview"><div class="preview-head"><h2>서식 미리보기</h2><span>PNG · <b id="size"></b></span></div><div class="stage"><canvas id="paper" aria-label="작성한 재직자 인사기록표 미리보기"></canvas></div></section></div></main>
+<script src="draft.js"></script><script src="themes.js"></script><script src="layouts.js"></script><script>
+const $=id=>document.getElementById(id), groups=['기본 정보','능력','설정'];
+const definitions=[
+[['name','이름 (한글)'],['native','이름 (원어)'],['age','나이'],['gender','성별'],['origin','출신지'],['grade','활동 등급',['C','B','A','S']]],
+[['branch','소속 지부'],['role','구분',['센티넬','가이드']],['appointed','임용일','date'],['job','담당 업무'],['date','작성일자','date']],
+[['ability','능력 특성','long'],['caution','유의사항','long'],['past','성장 배경 및 과거사','long'],['notes','기타 특기사항','long']]];
+function defaultData(){
+ const today=new Date();
+ return {branch:'남해권 지부',date:[today.getFullYear(),String(today.getMonth()+1).padStart(2,'0'),String(today.getDate()).padStart(2,'0')].join('-')};
+}
+function defaultSections(){return {ability:[['ability','능력 특성'],['caution','유의사항']],setting:[['past','성장 배경 및 과거사'],['notes','기타 특기사항']]}}
+const restored=readDraft();
+let showGraphics=restored.showGraphics!==false;
+let fluxCentered=restored.fluxCentered===true;
+$('fluxCenter').onclick=()=>{fluxCentered=!fluxCentered;syncGraphics();saveDraft();render()};
+function syncGraphics(){
+ $('fluxCenter').hidden=selectedStyle!=='flux';
+ $('fluxCenter').setAttribute('aria-pressed',String(fluxCentered));
+ $('graphics').hidden=selectedStyle==='standard';
+ const btn=$('graphics');btn.textContent=showGraphics?'그래픽 켜짐':'그래픽 꺼짐';btn.setAttribute('aria-pressed',String(showGraphics))}
+syncGraphics();
+$('graphics').onclick=()=>{showGraphics=!showGraphics;syncGraphics();saveDraft();render()};
+let data={...defaultData(),...restored.data},sections=restored.sections||defaultSections();
+if(Object.hasOwn(themes,restored.style))selectedStyle=restored.style;
+let portrait=null,photoVersion=0;
+groups.forEach((g,i)=>{const tab=document.createElement('button');tab.textContent=g;$('tabs').append(tab);const box=document.createElement('div');box.className='fields';box.hidden=i!==0;tab.setAttribute('aria-pressed',String(!box.hidden));tab.onclick=()=>{[...$('form').children].forEach((b,n)=>{b.hidden=i!==n;$('tabs').children[n].setAttribute('aria-pressed',String(i===n))})};$('form').append(box);
+if(i===0){const p=document.createElement('div');p.className='wide photo';p.innerHTML='<div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0116 0v2z"/></svg><img id="thumb" hidden alt=""></div><div><strong>프로필 이미지</strong><br><label class="pick">사진 선택<input id="pic" type="file" accept="image/*"></label><button class="del" hidden id="del">삭제</button></div><label class="credit-field">이미지 출처<input data-field="credit"></label>';box.append(p);const credit=p.querySelector('[data-field=credit]');credit.value=data.credit||'';credit.oninput=()=>{data.credit=credit.value;saveDraft();render()}}
+if(i>0){chapterEditor(box,i===1?'ability':'setting');return}
+for(const [key,title,type] of [...definitions[0],...definitions[1]]){const label=document.createElement('label');label.textContent=title;const el=document.createElement(Array.isArray(type)?'select':type==='long'?'textarea':'input');if(Array.isArray(type))for(const val of ['',...type])el.add(new Option(val||'선택',val));if(type==='date')el.type='date';if(type==='long')label.className='wide';el.dataset.field=key;el.value=data[key]||'';el.oninput=()=>{data[key]=el.value;saveDraft();render()};label.append(el);box.append(label)}});
+function photo(img){portrait=img;$('thumb').hidden=!img;$('thumb').previousElementSibling.style.display=img?'none':'';$('del').hidden=!img;if(img)$('thumb').src=img.src;else $('thumb').removeAttribute('src');render()}
+$('pic').onchange=async e=>{const file=e.target.files[0];if(!file)return;const version=++photoVersion;e.target.value='';try{if(await loadPortrait(file,version))await photoRecord('put',file)}catch{$('status').textContent='사진을 열거나 브라우저에 저장하지 못했어요.'}};
+$('del').onclick=async()=>{photoVersion++;photo(null);try{await photoRecord('delete')}catch{$('status').textContent='저장된 사진을 삭제하지 못했어요.'}};
+$('resetRecord').onclick=()=>$('resetDialog').showModal();
+$('cancelReset').onclick=()=>$('resetDialog').close();
+$('confirmReset').onclick=async()=>{
+ $('confirmReset').disabled=true;
+ photoVersion++;
+ try{
+   await photoRecord('delete');
+   data=defaultData();
+   sections=defaultSections();
+   for(const el of $('form').querySelectorAll('[data-field]'))el.value=data[el.dataset.field]||'';
+   ['ability','setting'].forEach((group,i)=>{
+     const box=$('form').children[i+1];box.replaceChildren();chapterEditor(box,group);
+   });
+   photo(null);
+   $('status').textContent='기록을 초기화했어요.';
+   saveDraft();
+ }catch{$('status').textContent='브라우저에 저장된 기록을 초기화하지 못했어요.'}
+ finally{$('confirmReset').disabled=false;$('resetDialog').close()}
+};
+const canvas=$('paper'),ctx=canvas.getContext('2d'),scale=3,W=700,margin=47,content=W-2*margin;
+function font(size,bold=false){ctx.font=(bold?'bold ':'')+size+'px '+recordFont}
+function lines(str,width){let result=[];for(const para of String(str||'').split('\n')){let line='';for(const ch of para){if(line&&ctx.measureText(line+ch).width>width){result.push(line);line=''}line+=ch}result.push(line)}return result}
+function render(){
+if(Object.hasOwn(editorialLayouts,selectedStyle)){renderLayout(selectedStyle);return}
+const theme=palette(selectedStyle),styled=selectedStyle!=='standard';const actions=[];let y=38;
+if(styled)actions.push(()=>paintMasthead(ctx,selectedStyle));
+function text(str,x,y,size=12,bold=false,align='left'){actions.push(()=>{font(size,bold);ctx.textAlign=align;ctx.fillStyle=theme.ink;ctx.fillText(str,x,y)})}
+function rect(x,y,w,h,shade){actions.push(()=>{if(shade){ctx.fillStyle=theme.label;ctx.fillRect(x,y,w,h)}ctx.lineWidth=.7;ctx.strokeStyle=theme.rule;ctx.strokeRect(x,y,w,h)})}
+function section(name){y+=24;const base=y;if(styled)actions.push(()=>{ctx.fillStyle=theme.accent;ctx.fillRect(margin,base-10,3,10)});font(14,true);for(const [i,l] of lines(name,content-20).entries()){if(i)y+=18;text(l,margin+(styled?16:0),y,14,true)}y+=8}
+function row(items,start=margin,min=30){font(12);const entries=items.map(([val,width,label])=>({width,label,ls:lines(val,width-16)}));const h=Math.max(min,...entries.map(e=>e.ls.length*17+12));let x=start;for(const e of entries){rect(x,y,e.width,h,e.label);let ty=y+(h-e.ls.length*17)/2+13;for(const l of e.ls){text(l,e.label?x+e.width/2:x+8,ty,12,!!e.label,e.label?'center':'left');ty+=17}x+=e.width}y+=h}
+function block(value,min){row([[value,content,false]],margin,min)}
+const L=(v,w)=>[v,w,true],V=(k,w)=>[data[k],w,false];
+text('국가특수재난관리센터  /  남해권 지부',margin,y,12);y+=styled?111:41;text('재직자 인사기록표',styled?margin:W/2,y,27,true,styled?'left':'center');y+=23;text('작성일자　'+(data.date||'____-__-__').replaceAll('-','.'),W-margin,y,11,false,'right');
+section('1. 인적 사항');const top=y,ph=156,start=margin+ph,rem=content-ph;
+const recordRowHeight=52,labelWidth=80,valueWidth=rem/2-labelWidth;
+function paired(left,label,right,other){return [L(label,labelWidth),V(left,valueWidth),L(other,labelWidth),V(right,valueWidth)]}
+const names=(data.native||'').trim()?paired('name','이름 (한글)','native','이름 (원어)'):[L('이름 (한글)',labelWidth),V('name',rem-labelWidth)];
+row(names,start,recordRowHeight);
+row(paired('age','나이','gender','성별'),start,recordRowHeight);
+row(paired('origin','출신지','grade','활동 등급'),start,recordRowHeight);
+const h=y-top;rect(margin,top,ph,h,false);if(portrait){const img=portrait;actions.push(()=>{let w=ph-2,hh=h-2;const k=Math.max(w/img.naturalWidth,hh/img.naturalHeight);ctx.save();ctx.beginPath();ctx.rect(margin+1,top+1,w,hh);ctx.clip();ctx.drawImage(img,margin+(ph-img.naturalWidth*k)/2,top+(h-img.naturalHeight*k)/2,img.naturalWidth*k,img.naturalHeight*k);ctx.restore()})}
+section('2. 임용 및 근무 사항');row([L('소속 지부',100),V('branch',203),L('구분',100),V('role',203)],margin,recordRowHeight);row([L('임용일',100),V('appointed',203),L('담당 업무',100),V('job',203)],margin,recordRowHeight);
+if(sections.ability.length)section('3. 능력 및 현장 근무 특성');
+for(const [key,label] of sections.ability)row([L(label,122),V(key,484)],margin,65);
+sections.setting.forEach(([key,label],i)=>{section((3+Number(Boolean(sections.ability.length))+i)+'. '+label);block(data[key],i===0?148:64)});
+if(data.credit?.trim()){font(11);y+=14;for(const l of lines('이미지 출처 · '+data.credit.trim(),content)){y+=16;text(l,margin,y,11)}}
+const height=Math.max(990,Math.ceil(y+65));text('NSD 남해권 지부  |  인사운영팀',W-margin,height-28,11,false,'right');
+canvas.width=W*scale;canvas.height=height*scale;ctx.scale(scale,scale);ctx.fillStyle=theme.paper;ctx.fillRect(0,0,W,height);actions.forEach(f=>f());$('size').textContent=canvas.width+' × '+canvas.height}
+$('save').onclick=()=>{canvas.toBlob(blob=>{if(!blob){$('status').textContent='이미지를 저장하지 못했어요.';return}const url=URL.createObjectURL(blob),a=document.createElement('a');a.download='NSD_'+(data.name||'재직자')+'_인사기록표.png';a.href=url;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$('status').textContent='PNG 파일을 생성했어요.'},'image/png')};
+async function startEditor(){
+ const save=$('save');save.disabled=true;
+ try{await Promise.all([document.fonts.load('400 16px Pretendard'),document.fonts.load('700 16px Pretendard')])}
+ catch{$('status').textContent='Pretendard를 불러올 수 없어 기본 고딕으로 표시합니다.'}
+ const initialVersion=photoVersion;
+ try{const file=await photoRecord('get');if(file&&initialVersion===0&&photoVersion===0)await loadPortrait(file,0)}catch{$('status').textContent='브라우저의 사진 저장소를 열 수 없어요.'}
+ styleControls();colorControls();render();save.disabled=false
+}
+startEditor();
+</script></body></html>
