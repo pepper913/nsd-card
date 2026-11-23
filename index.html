@@ -101,8 +101,26 @@ if(styled)actions.push(()=>{ctx.save();ctx.translate(0,headerOffset);paintMasthe
 function text(str,x,y,size=12,bold=false,align='left'){actions.push(()=>{font(size,bold);ctx.textAlign=align;ctx.fillStyle=theme.ink;ctx.fillText(str,x,y)})}
 function rect(x,y,w,h,shade){actions.push(()=>{if(shade){ctx.fillStyle=theme.label;ctx.fillRect(x,y,w,h)}ctx.lineWidth=.7;ctx.strokeStyle=theme.rule;ctx.strokeRect(x,y,w,h)})}
 function section(name){y+=24;const base=y;if(styled)actions.push(()=>{ctx.fillStyle=theme.accent;ctx.fillRect(margin,base-10,3,10)});font(14,true);for(const [i,l] of lines(name,content-20).entries()){if(i)y+=18;text(l,margin+(styled?16:0),y,14,true)}y+=8}
-const valuePaddingLeft=14;
-function row(items,start=margin,min=30){font(12);const entries=items.map(([val,width,label])=>({width,label,ls:lines(val,width-(label?8:valuePaddingLeft)-8)}));const h=Math.max(min,...entries.map(e=>e.ls.length*17+12));let x=start;for(const e of entries){rect(x,y,e.width,h,e.label);let ty=y+(h-e.ls.length*17)/2+13;for(const l of e.ls){text(l,e.label?x+e.width/2:x+valuePaddingLeft,ty,12,!!e.label,e.label?'center':'left');ty+=17}x+=e.width}y+=h}
+const cellPadding=14,lineHeight=17;
+function row(items,start=margin,min=30){
+ ctx.textBaseline="alphabetic";
+ const entries=items.map(([value,width,label])=>{
+   font(12,label);
+   const rows=lines(value,width-2*(label?8:cellPadding));
+   const first=ctx.measureText(rows[0]||'가'),last=ctx.measureText(rows[rows.length-1]||'가');
+   const ascent=first.actualBoundingBoxAscent,descent=last.actualBoundingBoxDescent;
+   return {width,label,rows,ascent,height:(rows.length-1)*lineHeight+ascent+descent};
+ });
+ const h=Math.max(min,...entries.map(e=>e.height+2*cellPadding));
+ let x=start;
+ for(const e of entries){
+   rect(x,y,e.width,h,e.label);
+   const baseline=y+(h-e.height)/2+e.ascent;
+   e.rows.forEach((line,i)=>text(line,e.label?x+e.width/2:x+cellPadding,baseline+i*lineHeight,12,!!e.label,e.label?'center':'left'));
+   x+=e.width;
+ }
+ y+=h;
+}
 function block(value,min){row([[value,content,false]],margin,min)}
 const L=(v,w)=>[v,w,true],V=(k,w)=>[data[k],w,false];
 text('국가특수재난관리센터  /  남해권 지부',margin,y,12);y+=styled?119:65;text('재직자 인사기록표',styled?margin:W/2,y,27,true,styled?'left':'center');
