@@ -4,11 +4,11 @@
 <script src="draft.js"></script><script src="themes.js"></script><script src="layouts.js"></script><script>
 const $=id=>document.getElementById(id), groups=['기본 정보','능력','설정'];
 const definitions=[
-[['name','이름 (한글)'],['native','이름 (원어)'],['age','나이'],['gender','성별'],['origin','출신지'],['grade','활동 등급',['C','B','A','S']]],
+[['recordTitle','서식 제목'],['name','이름 (한글)'],['native','이름 (원어)'],['age','나이'],['gender','성별'],['origin','출신지'],['grade','활동 등급',['C','B','A','S']]],
 [['branch','소속 지부'],['role','구분',['센티넬','가이드']],['appointed','임용일','date'],['job','담당 업무']],
 [['ability','능력 특성','long'],['caution','유의사항','long'],['past','성장 배경 및 과거사','long'],['notes','기타 특기사항','long']]];
 function defaultData(){
- return {branch:'남해권 지부'};
+ return {branch:'남해권 지부',recordTitle:'재직자 인사기록표'};
 }
 function defaultSections(){return {ability:[['ability','능력 특성'],['caution','유의사항']],setting:[['past','성장 배경 및 과거사'],['notes','기타 특기사항']]}}
 const restored=readDraft();
@@ -16,6 +16,7 @@ let showGraphics=restored.showGraphics!==false;
 let fluxCentered=restored.fluxCentered===true;
 $('fluxCenter').onclick=()=>{fluxCentered=!fluxCentered;syncGraphics();saveDraft();render()};
 function syncGraphics(){
+ if($('recordTitleField'))$('recordTitleField').hidden=!['standard','orbit'].includes(selectedStyle);
  $('fluxCenter').hidden=selectedStyle!=='flux';
  $('fluxCenter').setAttribute('aria-pressed',String(fluxCentered));
  $('graphics').hidden=selectedStyle==='standard';
@@ -28,7 +29,7 @@ let portrait=null,photoVersion=0;
 groups.forEach((g,i)=>{const tab=document.createElement('button');tab.textContent=g;$('tabs').append(tab);const box=document.createElement('div');box.className='fields';box.hidden=i!==0;tab.setAttribute('aria-pressed',String(!box.hidden));tab.onclick=()=>{[...$('form').children].forEach((b,n)=>{b.hidden=i!==n;$('tabs').children[n].setAttribute('aria-pressed',String(i===n))})};$('form').append(box);
 if(i===0){const p=document.createElement('div');p.className='wide photo';p.innerHTML='<div class="thumb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0116 0v2z"/></svg><canvas id="thumb" hidden aria-hidden="true"></canvas></div><div><strong>프로필 이미지</strong><br><label class="pick">사진 선택<input id="pic" type="file" accept="image/*"></label><button class="del" hidden id="del">삭제</button></div><label class="credit-field">이미지 출처<input data-field="credit"></label>';box.append(p);const credit=p.querySelector('[data-field=credit]');credit.value=data.credit||'';credit.oninput=()=>{data.credit=credit.value;saveDraft();render()}}
 if(i>0){chapterEditor(box,i===1?'ability':'setting');return}
-for(const [key,title,type] of [...definitions[0],...definitions[1]]){const label=document.createElement('label');label.textContent=title;const el=document.createElement(Array.isArray(type)?'select':type==='long'?'textarea':'input');if(Array.isArray(type))for(const val of ['',...type])el.add(new Option(val||'선택',val));if(type==='date')el.type='date';if(type==='long')label.className='wide';el.dataset.field=key;el.value=data[key]||'';el.oninput=()=>{data[key]=el.value;saveDraft();render()};label.append(el);box.append(label)}});
+for(const [key,title,type] of [...definitions[0],...definitions[1]]){const label=document.createElement('label');label.textContent=title;const el=document.createElement(Array.isArray(type)?'select':type==='long'?'textarea':'input');if(Array.isArray(type))for(const val of ['',...type])el.add(new Option(val||'선택',val));if(type==='date')el.type='date';if(type==='long'||key==='recordTitle')label.className='wide';if(key==='recordTitle'){label.id='recordTitleField';label.hidden=!['standard','orbit'].includes(selectedStyle)}el.dataset.field=key;el.value=data[key]||'';el.oninput=()=>{data[key]=el.value;saveDraft();render()};label.append(el);box.append(label)}});
 function photo(img){portrait=img;$('thumb').hidden=!img;$('thumb').previousElementSibling.style.display=img?'none':'';$('del').hidden=!img;refreshThumbnail();render()}
 $('pic').onchange=async e=>{const file=e.target.files[0];if(!file)return;const version=++photoVersion;e.target.value='';try{if(await loadPortrait(file,version))await photoRecord('put',file)}catch{$('status').textContent='사진을 열거나 브라우저에 저장하지 못했어요.'}};
 $('del').onclick=async()=>{photoVersion++;photo(null);try{await photoRecord('delete')}catch{$('status').textContent='저장된 사진을 삭제하지 못했어요.'}};
@@ -123,7 +124,11 @@ function row(items,start=margin,min=30){
 }
 function block(value,min){row([[value,content,false]],margin,min)}
 const L=(v,w)=>[v,w,true],V=(k,w)=>[data[k],w,false];
-text('국가특수재난관리센터  /  남해권 지부',margin,y,12);y+=styled?119:65;text('재직자 인사기록표',styled?margin:W/2,y,27,true,styled?'left':'center');
+text('국가특수재난관리센터  /  남해권 지부',margin,y,12);y+=styled?119:65;font(27,true);
+for(const [i,line] of lines(data.recordTitle,content).entries()){
+ if(i)y+=35;
+ text(line,styled?margin:W/2,y,27,true,styled?'left':'center');
+}
 y+=styled?12:24;
 section('1. 인적 사항');const top=y,ph=156,start=margin+ph,rem=content-ph;
 const recordRowHeight=52,labelWidth=80,valueWidth=rem/2-labelWidth;
