@@ -5,11 +5,10 @@
 const $=id=>document.getElementById(id), groups=['기본 정보','능력','설정'];
 const definitions=[
 [['name','이름 (한글)'],['native','이름 (원어)'],['age','나이'],['gender','성별'],['origin','출신지'],['grade','활동 등급',['C','B','A','S']]],
-[['branch','소속 지부'],['role','구분',['센티넬','가이드']],['appointed','임용일','date'],['job','담당 업무'],['date','작성일자','date']],
+[['branch','소속 지부'],['role','구분',['센티넬','가이드']],['appointed','임용일','date'],['job','담당 업무']],
 [['ability','능력 특성','long'],['caution','유의사항','long'],['past','성장 배경 및 과거사','long'],['notes','기타 특기사항','long']]];
 function defaultData(){
- const today=new Date();
- return {branch:'남해권 지부',date:[today.getFullYear(),String(today.getMonth()+1).padStart(2,'0'),String(today.getDate()).padStart(2,'0')].join('-')};
+ return {branch:'남해권 지부'};
 }
 function defaultSections(){return {ability:[['ability','능력 특성'],['caution','유의사항']],setting:[['past','성장 배경 및 과거사'],['notes','기타 특기사항']]}}
 const restored=readDraft();
@@ -57,15 +56,19 @@ function font(size,bold=false){ctx.font=(bold?'bold ':'')+size+'px '+recordFont}
 function lines(str,width){let result=[];for(const para of String(str||'').split('\n')){let line='';for(const ch of para){if(line&&ctx.measureText(line+ch).width>width){result.push(line);line=''}line+=ch}result.push(line)}return result}
 function render(){
 if(Object.hasOwn(editorialLayouts,selectedStyle)){renderLayout(selectedStyle);return}
-const theme=palette(selectedStyle),styled=selectedStyle!=='standard';const actions=[];let y=38;
-if(styled)actions.push(()=>paintMasthead(ctx,selectedStyle));
+const theme=palette(selectedStyle),styled=selectedStyle!=='standard';const actions=[];
+const headerOffset=24;
+let y=38+headerOffset;
+if(styled)actions.push(()=>{ctx.save();ctx.translate(0,headerOffset);paintMasthead(ctx,selectedStyle);ctx.restore()});
 function text(str,x,y,size=12,bold=false,align='left'){actions.push(()=>{font(size,bold);ctx.textAlign=align;ctx.fillStyle=theme.ink;ctx.fillText(str,x,y)})}
 function rect(x,y,w,h,shade){actions.push(()=>{if(shade){ctx.fillStyle=theme.label;ctx.fillRect(x,y,w,h)}ctx.lineWidth=.7;ctx.strokeStyle=theme.rule;ctx.strokeRect(x,y,w,h)})}
 function section(name){y+=24;const base=y;if(styled)actions.push(()=>{ctx.fillStyle=theme.accent;ctx.fillRect(margin,base-10,3,10)});font(14,true);for(const [i,l] of lines(name,content-20).entries()){if(i)y+=18;text(l,margin+(styled?16:0),y,14,true)}y+=8}
-function row(items,start=margin,min=30){font(12);const entries=items.map(([val,width,label])=>({width,label,ls:lines(val,width-16)}));const h=Math.max(min,...entries.map(e=>e.ls.length*17+12));let x=start;for(const e of entries){rect(x,y,e.width,h,e.label);let ty=y+(h-e.ls.length*17)/2+13;for(const l of e.ls){text(l,e.label?x+e.width/2:x+8,ty,12,!!e.label,e.label?'center':'left');ty+=17}x+=e.width}y+=h}
+const valuePaddingLeft=14;
+function row(items,start=margin,min=30){font(12);const entries=items.map(([val,width,label])=>({width,label,ls:lines(val,width-(label?8:valuePaddingLeft)-8)}));const h=Math.max(min,...entries.map(e=>e.ls.length*17+12));let x=start;for(const e of entries){rect(x,y,e.width,h,e.label);let ty=y+(h-e.ls.length*17)/2+13;for(const l of e.ls){text(l,e.label?x+e.width/2:x+valuePaddingLeft,ty,12,!!e.label,e.label?'center':'left');ty+=17}x+=e.width}y+=h}
 function block(value,min){row([[value,content,false]],margin,min)}
 const L=(v,w)=>[v,w,true],V=(k,w)=>[data[k],w,false];
-text('국가특수재난관리센터  /  남해권 지부',margin,y,12);y+=styled?111:41;text('재직자 인사기록표',styled?margin:W/2,y,27,true,styled?'left':'center');y+=23;text('작성일자　'+(data.date||'____-__-__').replaceAll('-','.'),W-margin,y,11,false,'right');
+text('국가특수재난관리센터  /  남해권 지부',margin,y,12);y+=styled?119:65;text('재직자 인사기록표',styled?margin:W/2,y,27,true,styled?'left':'center');
+y+=styled?12:24;
 section('1. 인적 사항');const top=y,ph=156,start=margin+ph,rem=content-ph;
 const recordRowHeight=52,labelWidth=80,valueWidth=rem/2-labelWidth;
 function paired(left,label,right,other){return [L(label,labelWidth),V(left,valueWidth),L(other,labelWidth),V(right,valueWidth)]}

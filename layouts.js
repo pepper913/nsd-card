@@ -65,8 +65,8 @@ function renderLayout(id){
      bottom=y
    }
  }else{
-   const hero=324,cy=190;
-   box(0,0,700,hero+32,mix(paper,accent,.055));if(showGraphics){ops.push(()=>{ctx.save();ctx.beginPath();ctx.rect(0,0,700,hero);ctx.clip();for(let i=0;i<10;i++)ellipse(ctx,350,cy,120+i*24,60+i*12,-.27,mix(paper,accent,.24));ctx.restore()})}
+   const hero=324;
+   box(0,0,700,hero+32,mix(paper,accent,.055));if(showGraphics){ops.push(()=>{ctx.save();for(let i=0;i<10;i++)ellipse(ctx,350,173,120+i*24,49+i*9,-.27,mix(paper,accent,.24));ctx.restore()})}
    words('NSD  /  남해권 지부',32,24,300,13,{weight:'bold'});words('GATE OBSERVATION',438,24,230,13,{color:accent});
    art(245,85,210,210,true);
    for(const [key,label,x] of [['grade','활동 등급',0],['role','구분',455]]){
@@ -81,7 +81,7 @@ function renderLayout(id){
    if(sections.setting.length)box(0,y,12,40,accent);bottom=settingRows(35,y,630);
  }
  if(data.credit?.trim())bottom=words('이미지 출처 · '+data.credit.trim(),38,bottom+12,624,11,{color:muted});
- const height=Math.max(990,Math.ceil(bottom+70));rule(36,height-48,664,height-48,muted);words('NSD 남해권 지부 인사운영팀',38,height-36,310,11,{color:muted});words('작성일자  '+(data.date||''),454,height-36,220,11,{color:muted});
+ const height=Math.max(990,Math.ceil(bottom+70));rule(36,height-48,664,height-48,muted);words('NSD 남해권 지부 인사운영팀',38,height-36,310,11,{color:muted});
  canvas.width=W*scale;canvas.height=height*scale;ctx.scale(scale,scale);ctx.fillStyle=paper;ctx.fillRect(0,0,W,height);ops.forEach(draw=>draw());$('size').textContent=canvas.width+' × '+canvas.height;
 }
 themes.gate={name:editorialLayouts.gate,paper:'#171422',ink:'#f4efff',muted:'#c4b9d4',accent:'#c3ff96',rule:'#584e65'};
